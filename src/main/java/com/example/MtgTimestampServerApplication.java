@@ -1,8 +1,10 @@
 package com.example;
 
 import com.example.entity.LapInfo;
+import com.example.service.SlackService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
@@ -18,11 +20,14 @@ public class MtgTimestampServerApplication {
 		SpringApplication.run(MtgTimestampServerApplication.class, args);
 	}
 
+    @Autowired
+    SlackService slackService;
+
 	@PostMapping(value = "/POST")
 //    @RequestMapping(method = RequestMethod.POST, value = "/POST")
 	public HttpStatus postSlack(@RequestBody LapInfo lapInfo) {
 		log.info(lapInfo.toString());
-		return HttpStatus.OK;
+		return slackService.postSlack(lapInfo);
 	}
 
     @RequestMapping(method = RequestMethod.GET, value = "/GET")
