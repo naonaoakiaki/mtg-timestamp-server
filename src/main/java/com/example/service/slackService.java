@@ -1,5 +1,6 @@
 package com.example.service;
 
+import ch.qos.logback.classic.pattern.MessageConverter;
 import com.example.entity.LapInfo;
 import com.example.entity.SlackPayload;
 import org.slf4j.Logger;
@@ -28,9 +29,9 @@ public class SlackService {
     public HttpStatus postSlack(LapInfo lapInfo) {
         logger.info(lapInfo.toString());
         RestTemplate restTemplate = new RestTemplate();
-        SlackPayload slackPayload = new SlackPayload("#time_stamp_sand", "webhookbot", lapInfo.toString(), ":ghost:");
-        RequestEntity<SlackPayload> requestEntity = RequestEntity.post(this.uri).contentType(MediaType.APPLICATION_JSON).body(slackPayload);
-        ResponseEntity<SlackPayload> responseEntity = restTemplate.exchange(requestEntity, SlackPayload.class);
+        SlackPayload slackPayload = new SlackPayload("#time_stamp_sand", "webhookbot", lapInfo.getText(), ":ghost:");
+        RequestEntity<SlackPayload> requestEntity = RequestEntity.post(this.uri).body(slackPayload);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(requestEntity, String.class);
         return responseEntity.getStatusCode();
     }
 }
