@@ -3,6 +3,7 @@ package com.example.service;
 import ch.qos.logback.classic.pattern.MessageConverter;
 import com.example.entity.LapInfo;
 import com.example.entity.SlackPayload;
+import com.example.properties.SlackProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,18 +20,16 @@ import java.net.URI;
 @Service
 public class SlackService {
 
-    @Value("${api.url:https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX}")
-    URI uri;
+    @Autowired
+    SlackProperties slackProperties;
 
     private static final Logger logger = LoggerFactory.getLogger(SlackService.class);
-
-
 
     public HttpStatus postSlack(LapInfo lapInfo) {
         logger.info(lapInfo.toString());
         RestTemplate restTemplate = new RestTemplate();
         SlackPayload slackPayload = new SlackPayload("#time_stamp_sand", "webhookbot", lapInfo.getText(), ":ghost:");
-        RequestEntity<SlackPayload> requestEntity = RequestEntity.post(this.uri).body(slackPayload);
+        RequestEntity<SlackPayload> requestEntity = RequestEntity.post(slackProperties.getUri()).body(slackPayload);
         ResponseEntity<String> responseEntity = restTemplate.exchange(requestEntity, String.class);
         return responseEntity.getStatusCode();
     }

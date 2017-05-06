@@ -24,7 +24,6 @@ public class MtgTimestampServerApplication {
     SlackService slackService;
 
 	@PostMapping(value = "/POST")
-//    @RequestMapping(method = RequestMethod.POST, value = "/POST")
 	public HttpStatus postSlack(@RequestBody LapInfo lapInfo) {
 		log.info(lapInfo.toString());
 		return slackService.postSlack(lapInfo);
